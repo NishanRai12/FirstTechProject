@@ -1,5 +1,5 @@
 <?php
-
+//////////////////////ADDING CONTENTS TO A NEW BRANCH MF
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
