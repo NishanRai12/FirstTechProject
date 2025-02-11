@@ -6,9 +6,10 @@
     <title>Profile</title>
 </head>
 <body>
-<h1>Profile</h1>
-<form action="{{route('addProfile',Auth::user()->id)}}" method="POST">
+<h1>HELLO Profile</h1>
+<form action="{{route('profile.store')}}" method="POST">
     @csrf
+    <input type="hidden" id="user_id" name="user_id" value="{{Auth::user()->id}}">
     <label for="bio">Bio</label>
     <textarea name ="bio" rows="4" cols="50"></textarea>
     @error('bio')

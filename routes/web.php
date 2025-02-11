@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.login');
+});
+Route::get('/navigation',function(){
+    return view('navigation');
 });
 //display the register page
 Route::get('/register',[UserController::class,'showRegistration'])->name('register');
@@ -21,11 +27,10 @@ Route::post('/register',[UserController::class,'registerUser'])->name('setUser')
 Route::post('/user_login',[UserController::class,'authenticateLogin'])->name('userLog');
 //logout
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
-
+//Route::resource('register',RegisterController::class);
 Route::middleware('auth')->group(function(){
-//    Route::get('/home/dashboard',[UserController::class,'showDashboard'])->name('dashboard');
-    Route::post('/addProfile/{id}',[ProfileController::class,'addProfile'])->name('addProfile');
-    Route::get('/home/profile/{id}',[ProfileController::class,'showCreateProfile'])->name('showProfile');
+    Route::resource('profile',ProfileController::class)->except('index','destroy');
+    Route::resource('post',PostController::class)->except('index','destroy');
 });
 
 

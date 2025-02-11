@@ -91,7 +91,7 @@ class UserController extends Controller
     //function to logout the current authenticartion
     public function logout(){
         Auth::logout();
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
 }
 
