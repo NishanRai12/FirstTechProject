@@ -11,9 +11,9 @@
     <h1>Login</h1>
     <form action="{{route('userLog')}}" method="POST">
         @csrf
-        <label for="emailUserName">Username/Email</label>
-        <input type="text" name="emailUserName"><br>
-        @error('emailUserName')
+        <label for="loginMainData">Username/Email</label>
+        <input type="text" name="loginMainData"><br>
+        @error('loginMainData')
             <div style="color:red;">{{$message}}</div>
         @enderror
         <label for="password">Password</label>
@@ -22,9 +22,11 @@
             <div style="color:red;">{{$message}}</div>
         @enderror
         <button for="submit" type="submit">Login</button>
-        @if (session('error'))
-            <div style="color:red;">{{session('error')}}</div>
-        @endif
+        @error('errors')
+        <div style="color:red;">{{$message}}</div>
+        @enderror
+
+
     </form>
 </body>
 

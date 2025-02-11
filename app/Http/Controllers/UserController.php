@@ -1,96 +1,99 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\User;
-use Hash;
+use Illuminate\view\View;
+//use Hash;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 
 class UserController extends Controller
 {
-    public function showRegistration()
+    public function showRegistration():View
     {
         return view('user.register');
     }
-    public function showLogin()
+    public function showLogin(): View
     {
         return view('user.login');
     }
-    public function showHomePage()
+    public function showHomePage(): View
     {
         return view('home');
     }
-    public function registerUser(Request $request)
+    public function showDashboard():View
     {
-        // dd($request->email);
-
-        //creating a rule for validation Type -2 Array
-        $validateRegisterData = $request->validate([
-            'email' => ['required', 'email','unique:users,email'],
-            'name' => ['required', 'max:100'],
-            'username' => ['required','min:6'],
-            'password' => ['required', 'min:6'],
-            'confirmPassword' => ['required', 'min:6']
-        ]);
-        //the validateRegisterData arrray holds the vailated data whish is now store din a new variable
+        return view('user.dashboard');
+    }
+    public function registerUser(RegisterRequest $request)    //The method returns a RedirectResponse type, meaning that after the action is performed, the user is redirected to another page
+    {
+        // Retrieve validated input data
+        $validateRegisterData = $request->validated();
+        //validating the value
         $user_email = $validateRegisterData['email'];
         $username = $validateRegisterData['username'];
         $name = $validateRegisterData['name'];
         $password = $validateRegisterData['password'];
-        $confirmPassword = $validateRegisterData['confirmPassword'];
         //fetch the data from the database
-        $findUsername= User::where('username', $username)->first();
-        if($findUsername){
-            $generateData= $username.rand(200,9999);
-            // return back()->with(compact('generateData'));
-            return back()->withErrors(['username'=> 'Username already exist,try '. $generateData]);
-        } else{
-            if ($password == $confirmPassword) {
-                //store the value in hash 
-                $hashed_password = Hash::make($password);
-                User::create([
-                    'email' => $user_email,
-                    'username' => $username,
-                    'name' => $name,
-                    'password' => $hashed_password
-                ]);
-                return redirect()->route('login');
-            } else {
-                session()->flash('Rerror', 'Password didnt match');
-                return back();
-            }
-        } 
-        //checking the email validity
-        // $findEmail = User::where('email', $user_email)->first();
-        // if ($findEmail) {
-        //     return back()->with('Rerror', 'Email already exists');
-        // } else {
-            
-        // }
-    }
-    public function authenticateLogin(Request $request){
-        //validating the login credential format
-        $validateLogin = $request->validate([
-            'emailUserName'=> ['required'],
-            'password'=>['required','min:6']
+        $findUsername = User::where('username', $username)->first();
+        while ($findUsername){
+            $randUsername =  $username . rand(200, 9999);
+            return back()->withErrors(provider: ['username'=>'The username has already been taken try '.$randUsername]);
+        }
+//        while ($findUsername) {
+//            // Generate a new u sername
+//            $randUsername = $username . rand(200, 9999);
+//            // Set the error message
+//            return back()->withErrors(['username' => 'The username has already been taken. Try ' . $randUsername]);
+//        }
+        //store the value in hash
+        $hashed_password = Hash::make($password);
+        User::create([
+            'email' => $user_email,
+            'username' => $username,
+            'name' => $name,
+            'password' => $hashed_password
         ]);
-        //store the validated password
-        $emailName = $validateLogin['emailUserName'];
+        return redirect()->route('login');
+
+
+    }
+    public function authenticateLogin(LoginRequest $request)
+    {
+        // Retrieve validated input data
+        $validateLogin=$request->validated();
+        //store the validated data
+        $mainData = $validateLogin['loginMainData'];
         $password = $validateLogin['password'];
 
-        $fetchUserCredentials = User::where('email', $emailName)->orWhere('username',$emailName)->first();
-                
-        if( $fetchUserCredentials){
-            //fetched password related to the query
-            $fetchedPassword= $fetchUserCredentials->password;
-            //comparring using hash
-            if(Hash::check($fetchedPassword, $password)){
-                return redirect()->route('home');
-            } else {
-            return back()->with('error','Password didnt matched');
-               
-            }
-        }else{
-            return back()->with('error','User doesnt exist');
+        //checking the user type for the user input
+        if (User::where('email',$mainData)->exists()) {
+            $type= "email";
+        }elseif(User::where('username',$mainData)->exists()){
+            $type= "username";
+        }else {
+            return back()->withErrors(['errors' => "The provided credentials doesn't exist."]);
+        }
+        //authenticate the user
+        if (Auth::attempt([$type => $mainData , 'password' => $request->password])) {
+            $request->session()->regenerate();
+            return redirect()->route('home') ;
+        }
+        else{
+            return back()->withErrors(['errors' => 'Password Incorrect.']);
         }
 
+
+    }
+    //function to logout the current authenticartion
+    public function logout(){
+        Auth::logout();
+        return redirect()->route('home');
     }
 }
+
+
+//return redirect()->route('home')->with('success', 'User '. Auth::user()->name .' logged in successfully');
