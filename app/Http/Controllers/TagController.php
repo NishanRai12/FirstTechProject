@@ -88,7 +88,11 @@ class TagController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if(Tag::where('id', $id)->exists()){
+            $fetchTag = Tag::where('id', $id)->first();
+            $fetchTag->delete();
+        }
+        return redirect()->route('tag.create') ;
     }
     public function search(Request $request){
         if(Tag::where('tag_name',$request->input('search_tag'))->exists()){

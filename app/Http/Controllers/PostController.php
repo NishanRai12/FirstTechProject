@@ -93,7 +93,6 @@ class PostController extends Controller
             $fetchData= Post::where('id', $id)->first();
             $fetchData->delete();
         }
-//        dd('abc');
         return redirect()->route('post.show',Auth::user()->id);
     }
 }

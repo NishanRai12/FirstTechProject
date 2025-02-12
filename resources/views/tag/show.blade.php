@@ -43,6 +43,11 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('tag.edit',$displayData->id)}}" >Edit</a></li>
+                                <form method= "POST" action="{{route('tag.destroy',$displayData->id)}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="dropdown-item" type="Submit"> Delete</button>
+                                </form>
                             </ul>
                         </div>
                     </td>
@@ -53,6 +58,21 @@
             <tr>
                 <td>{{$searched->tag_name}}</td>
                 <td>{{$searched->created_at}}</td>
+                <td>
+                    <div class="dropdown-center" style="display: flex; justify-content: end; ">
+                        <button style="background-color: white ; border: none;color : black ; place-content: center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{route('tag.edit',$searched->id)}}" >Edit</a></li>
+                            <form method= "POST" action="{{route('tag.destroy',$searched->id)}}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="dropdown-item" type="Submit"> Delete</button>
+                            </form>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         @endif
         </tbody>
