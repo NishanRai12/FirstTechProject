@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('post',PostController::class);
 //logout
     Route::get('/logout',[UserController::class,'logout'])->name('logout');
-    Route::resource('tag',TagController::class)->except('index','destroy');;
+    Route::resource('tag',TagController::class);
     Route::post('/tag/search', [TagController::class, 'search'])->name('tag.search');
 });
 //middleware  passing home if logged in

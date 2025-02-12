@@ -70,7 +70,6 @@ class PostController extends Controller
         $fetchPost= Post::where('id', $id)->first();
         return view('post.edit', ['post' => $fetchPost]);
     }
-
     /**
      * Update the specified resource in storage.
      */

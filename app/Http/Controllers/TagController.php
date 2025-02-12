@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TagRequest;
+use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,14 +21,6 @@ class TagController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-//    public function create()
-//    {
-////        $tagData = Tag::where('user_id', Auth::user()->id)->get()->paginate(5);
-//        $tagData = Tag::where('user_id', Auth::user()->id)->simplePaginate(5);
-//        //keeping it empty so that when the search is passed on the tag.create route it will display the variable
-//        $searched=-1;
-//        return view('tag.create', compact('tagData','searched'));
-//    }
 
     public function create()
     {
@@ -71,15 +64,23 @@ class TagController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $fetchedTag=Tag::where('id', $id)->first();
+        return view('tag.edit', compact('fetchedTag'));
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TagRequest $request, string $id)
     {
-        //
+        $validateTag = $request->validated();
+        $tagName= $validateTag['tag_name'];
+        if(Tag::where('id', $id)->exists()){
+            $findTag= Tag::where('id', $id)->first();
+            $findTag->update([
+                'tag_name' => $tagName
+            ]);
+        }
+            return redirect()->route('tag.create') ;
     }
 
     /**
