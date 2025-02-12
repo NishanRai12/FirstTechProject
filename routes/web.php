@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 
@@ -13,24 +14,29 @@ Route::get('/', function () {
 Route::get('/navigation',function(){
     return view('navigation');
 });
-//display the register page
-Route::get('/register',[UserController::class,'showRegistration'])->name('register');
-//display the login page
-Route::get('/login',[UserController::class,'showLogin'])->name('login');
+
 //display the home
 Route::get('/home',[UserController::class,'showHomePage'])->name('home');
 
-//register the new user
-Route::post('/register',[UserController::class,'registerUser'])->name('setUser');
 
 //getting the login credentials
 Route::post('/user_login',[UserController::class,'authenticateLogin'])->name('userLog');
-//logout
-Route::get('/logout',[UserController::class,'logout'])->name('logout');
-//Route::resource('register',RegisterController::class);
+//middleware passing required route  if the user is logged in
 Route::middleware('auth')->group(function(){
     Route::resource('profile',ProfileController::class)->except('index','destroy');
-    Route::resource('post',PostController::class)->except('index','destroy');
+    Route::resource('post',PostController::class);
+//logout
+    Route::get('/logout',[UserController::class,'logout'])->name('logout');
+    Route::resource('tag',TagController::class);
+});
+//middleware  passing home of the user logged in
+Route::middleware('nonauthCheck')->group(function(){
+    //display the register page
+    Route::get('/register',[UserController::class,'showRegistration'])->name('register');
+//display the login page
+    Route::get('/login',[UserController::class,'showLogin'])->name('login');
+    //register the new user
+    Route::post('/register',[UserController::class,'registerUser'])->name('setUser');
 });
 
 

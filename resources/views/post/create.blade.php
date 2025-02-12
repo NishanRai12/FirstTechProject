@@ -8,7 +8,6 @@
 
 </head>
 <body>
-<h1>POST</h1>
 @include('navigation')
 
 <div class="main_div">

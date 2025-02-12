@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function showRegistration():View
     {
-        return view('user.register');
+        return view('register.register');
     }
     public function showLogin(): View
     {
@@ -43,12 +43,6 @@ class UserController extends Controller
             $randUsername =  $username . rand(200, 9999);
             return back()->withErrors(provider: ['username'=>'The username has already been taken try '.$randUsername]);
         }
-//        while ($findUsername) {
-//            // Generate a new u sername
-//            $randUsername = $username . rand(200, 9999);
-//            // Set the error message
-//            return back()->withErrors(['username' => 'The username has already been taken. Try ' . $randUsername]);
-//        }
         //store the value in hash
         $hashed_password = Hash::make($password);
         User::create([
@@ -80,7 +74,7 @@ class UserController extends Controller
         //authenticate the user
         if (Auth::attempt([$type => $mainData , 'password' => $request->password])) {
             $request->session()->regenerate();
-            return redirect()->route('home') ;
+            return redirect()->route('post.index') ;
         }
         else{
             return back()->withErrors(['errors' => 'Password Incorrect.']);

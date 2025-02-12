@@ -8,6 +8,15 @@
 <body>
 @include('navigation')
     <h1>Home Page</h1>
-
+<div class="main_div">
+    <div class="child_div_1" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+{{--        @foreach($posts as $postData)--}}
+{{--            {{$postData->caption}}--}}
+{{--        @endforeach--}}
+            @foreach($posts as $postData)
+                {{ $postData->caption }}
+            @endforeach
+    </div>
+</div>
 </body>
 </html>

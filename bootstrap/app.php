@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AuthCheck;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-//        $middleware->alias([
-//            'authMiddelware' =>AuthMiddleware::class
-//        ]);
+        $middleware->alias([
+            'nonauthCheck' =>AuthCheck::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
