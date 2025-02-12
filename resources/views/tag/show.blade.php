@@ -25,7 +25,7 @@
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Created</th>
-            <th scope="col">Handle</th>
+
         </tr>
         </thead>
         <tbody>
@@ -36,16 +36,24 @@
                 <tr>
                     <td>{{$displayData->tag_name}}</td>
                     <td>{{$displayData->created_at}}</td>
+                    <td>
+                        <div class="dropdown-center" style="display: flex; justify-content: end; ">
+                            <button style="background-color: white ; border: none;color : black ; place-content: center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{route('tag.edit',$displayData->id)}}" >Edit</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         @else
-            {{--condition if the search action is initiated--}}
-            @foreach($searched as $displayData)
-                <tr>
-                    <td>{{$displayData->tag_name}}</td>
-                    <td>{{$displayData->created_at}}</td>
-                </tr>
-            @endforeach
+    {{--    displaying the result of search--}}
+            <tr>
+                <td>{{$searched->tag_name}}</td>
+                <td>{{$searched->created_at}}</td>
+            </tr>
         @endif
         </tbody>
     </table>
@@ -53,7 +61,7 @@
 </body>
 {{--condition if the search action is not initiated--}}
 @if( $searched === -1)
-    <div class="pagination">
+    <div style="display: flex; justify-content: center" class="pagination">
         {{ $tagData->links() }}
     </div>
 @endif
