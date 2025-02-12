@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\RegisterController;
+//use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -27,9 +27,10 @@ Route::middleware('auth')->group(function(){
     Route::resource('post',PostController::class);
 //logout
     Route::get('/logout',[UserController::class,'logout'])->name('logout');
-    Route::resource('tag',TagController::class);
+    Route::resource('tag',TagController::class)->except('index','destroy');;
+    Route::post('/tag/search', [TagController::class, 'search'])->name('tag.search');
 });
-//middleware  passing home of the user logged in
+//middleware  passing home if logged in
 Route::middleware('nonauthCheck')->group(function(){
     //display the register page
     Route::get('/register',[UserController::class,'showRegistration'])->name('register');
