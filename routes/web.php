@@ -9,14 +9,16 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('user.login');
+
+//    return redirect()->route('home');
+    return redirect()->route('login');
 });
+Route::get('/home',[PostController::class,'home'])->name('home');
 Route::get('/navigation',function(){
     return view('navigation');
 });
 
 //display the home
-Route::get('/home',[UserController::class,'showHomePage'])->name('home');
 
 
 //getting the login credentials
@@ -29,6 +31,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/logout',[UserController::class,'logout'])->name('logout');
     Route::resource('tag',TagController::class);
     Route::post('/tag/search', [TagController::class, 'search'])->name('tag.search');
+    Route::post('/post/search', [PostController::class, 'search'])->name('post.search');
 });
 //middleware  passing home if logged in
 Route::middleware('nonauthCheck')->group(function(){

@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        /* Style for the scrollable box */
+        .tag-box {
+            width: 100%;
+            height: 200px; /* Set the height as needed */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tag-box label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 
 </head>
 <body>
@@ -34,6 +50,20 @@
             <div style="color: red;">{{ $message }}</div>
             @enderror
             </div>
+            <label for="tags" class="form-label"><strong>Tags</strong></label>
+            <div class="tag-box">
+                <a style="margin-bottom: 20px; text-decoration: none" href="{{ route('tag.create') }}">
+                    <strong>Add more tags</strong>
+                </a>
+
+                @foreach ($tags as $tag)
+                    <label style="display: block; margin-bottom: 10px;">
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        {{ $tag->tag_name }}
+                    </label>
+                @endforeach
+            </div>
+
 
             <button style="width: 100px;" class="btn btn-primary" type="submit">Post</button>
         </form>

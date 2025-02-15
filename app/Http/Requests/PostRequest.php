@@ -24,6 +24,7 @@ class PostRequest extends FormRequest
         return [
             'caption' => 'required',
             'post_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
         ];
     }
 }

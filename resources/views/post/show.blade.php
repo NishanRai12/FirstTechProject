@@ -41,12 +41,7 @@
                             <div class="div_for_data">
                                 <p class="card-text">{{ $postData->caption }}</p>
                             </div>
-
                         </div>
-
-
-
-
                     </div>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
@@ -54,10 +49,12 @@
         @else
             <div>No posts available.</div>
         @endif
-
-
+        <div style="display: flex; justify-content: center" class="pagination">
+            {{ $userPost->links() }}
+        </div>
     </div>
-</div>
 
+</div>
 </body>
+
 </html>

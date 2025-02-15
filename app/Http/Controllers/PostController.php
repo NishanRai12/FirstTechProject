@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Post;
-use App\Http\Requests\PostRequest;
+
+use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+
+use App\Http\Requests\PostRequest;  // Correct request class
+
 
 class PostController extends Controller
 {
@@ -13,12 +18,13 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
 
-
+//index for authenticated user
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::with('user')->latest()->paginate(10);
         return view('post.index', ['posts' => $posts]);
     }
+
 
 
     /**
@@ -26,7 +32,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        $tags = Tag::all();
+        return view('post.create', ['tags' => $tags]);
     }
 
     /**
@@ -39,25 +46,31 @@ class PostController extends Controller
         // Handle file upload
         if ($request->hasFile('post_image')) {
             $pathOfPhoto = $request->file('post_image')->store('uploads', 'public');
-
         }
 
-        $validatePostRequest = $request->validated();
-        Post::create([
-            'user_id'=>Auth::id(),
-            'caption' => $validatePostRequest['caption'],
-            'post_image'=>$pathOfPhoto
+        // Validate and create the post
+        $validated = $request->validated();
+        $post = Post::create([
+            'user_id' => Auth::id(),
+            'caption' => $validated['caption'],
+            'post_image' => $pathOfPhoto,
         ]);
 
-        return redirect()->route('post.show',Auth::id());
+
+        $post->tags()->attach($request->input('tags'));
+
+        return redirect()->route('post.show', Auth::user()->id);  // Redirect to the created post
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $fetchPost = Post::where('user_id', $id)->get();
+        $fetchPost = Post::where('user_id', $id)->simplePaginate(3);
+//        $tagData = Tag::where('user_id', Auth::user()->id)->simplePaginate(5);
+
         return view('post.show', ['userPost' => $fetchPost, 'empty' => 'No post found']);
     }
 
@@ -65,24 +78,40 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(string $id)
     {
-        $fetchPost= Post::where('id', $id)->first();
-        return view('post.edit', ['post' => $fetchPost]);
+        $post = Post::with('tags')->findOrFail($id); // Fetch post with its tags
+        $tags = Tag::all(); // Fetch all available tags
+
+        return view('post.edit', compact('post', 'tags')); // Pass data to the view
     }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PostRequest $request, string $id)
     {
         $findPost = Post::where('id', $id)->first();
         if($findPost){
-            $findPost->update([
+            $updatedPost=$findPost->update([
                 'caption' => $request['caption'],
             ]);
+//            dd($updatedPost);
+            $updatedPost->tags()->sync($request->input('tags'));
         }
         return back()->with(['success' => 'Post updated successfully']);
     }
+//    public function update(Request $request, string $id)
+//    {
+//        $findPost = Post::where('id', $id)->first();
+//        if($findPost){
+//            $findPost->update([
+//                'caption' => $request['caption'],
+//            ]);
+//        }
+//        return back()->with(['success' => 'Post updated successfully']);
+//    }
 
     /**
      * Remove the specified resource from storage.
@@ -94,5 +123,27 @@ class PostController extends Controller
             $fetchData->delete();
         }
         return redirect()->route('post.show',Auth::user()->id);
+    }
+    public function search(Request $request)
+    {
+
+        $term = $request->input('search');
+
+        $posts = Post::WhereHas('tags', function ($query) use ($term) {
+            $query->where('tag_name', 'like', '%' . $term . '%');
+        })->orWhere('caption', 'like', '%' . $term . '%')
+            ->orWhereHas('user', function($query) use ($term) {
+            $query->where('name', 'like', '%' . $term . '%');})
+            ->distinct()
+            ->get();
+
+
+        return view('post.index', compact('posts'));
+    }
+    //for non authenticated user
+    public function home(){
+//        return view('post.index');
+        $posts = Post::all();
+        return view('post.index', ['posts' => $posts]);
     }
 }

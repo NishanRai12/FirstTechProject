@@ -24,7 +24,6 @@ class TagController extends Controller
 
     public function create()
     {
-        // Use paginate on the query builder before executing the query
         $tagData = Tag::where('user_id', Auth::user()->id)->simplePaginate(5);
 
         // Set the default value for searched
