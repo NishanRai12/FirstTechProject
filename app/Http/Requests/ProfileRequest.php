@@ -23,7 +23,8 @@ class ProfileRequest extends FormRequest
     {
         return [
             'bio' => ['nullable'],
-            'gender' => ['required','string']
+            'gender' => ['required','string'],
+            'profile_picture' => [ 'nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 }

@@ -13,6 +13,20 @@
         .hover-bg-grey:hover {
             color: #5e5e60;
         }
+        .profile_image {
+            width: 150px; /* You can adjust the size */
+            height: 150px; /* You can adjust the size */
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+            border-radius: 50%; /* Makes the image circular */
+            border: 3px solid #fff; /* Optional: Adds a white border around the image */
+        }
+        .profile_post_image {
+            width: 45px; /* You can adjust the size */
+            height: 45px; /* You can adjust the size */
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+            border-radius: 50%; /* Makes the image circular */
+            border: 3px solid #fff; /* Optional: Adds a white border around the image */
+        }
         .main_div {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -35,12 +49,24 @@
 <body>
 
 <div style="width: 250px " class="w3-sidebar w3-bar-block w3-light-grey w3-card">
-    <div style="margin-top: 30px; margin-left:50px;">
-        @if(Auth::check() && Auth::user()->name)
-            <span style="color: black;"><strong>{{Auth::user()->username}}</strong></span> <br>
-            <span style="color: rgba(69,67,67,0.84)">{{Auth::user()->name}}</span>
-        @endif
-    </div>
+    <a href="{{route('profile.show', Auth::user()->id)}}" style="text-decoration: none;">
+    {{--    user profile header--}}
+        <div style="margin-top: 30px; margin-left:40px;display: flex; align-items: center;">
+            <div style="margin-right: 10px;">
+                @if(Auth::check() && Auth::user()->name)
+                    @if(Auth::user()->profile && Auth::user()->profile->picture)
+                        <img class="profile_post_image" src="{{ asset('storage/' . Auth::user()->profile->picture) }}" alt="jjj" style="width: 50px; height: 50px; border-radius: 50%;">
+                    @else
+                        <img class="profile_post_image" src="{{ asset("storage/uploads/empt.jpg") }}" alt="jjj" style="width: 50px; height: 50px; border-radius: 50%;">
+                    @endif
+            </div>
+            <div>
+                <span style="color: black;"><strong>{{Auth::user()->username}}</strong></span> <br>
+                <span style=" color: rgba(69,67,67,0.84)">{{Auth::user()->name}}</span>
+            </div>
+            @endif
+        </div>
+    </a>
     <div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="w3-bar-item w3-button d-flex align-items-center ms-4" style="margin-top: 20px">

@@ -19,10 +19,18 @@
         @if($userPost)
             @foreach($userPost as $postData)
 
-                <div class="card" style="width: 18rem;">
-                    {{--                <img src="{{$postData->post_image ? asset('storage/' . $postData->post_image) : 'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="...">--}}
-                    {{--                <img src="{{ $postData->post_image ? asset('storage/uploads/posts' . $postData->post_image) : 'https://via.placeholder.com/300x200' }}" class="card-img-top" alt="Post image">--}}
-
+                <div class="card" style=" margin-left: 150px; margin-bottom:20px;width: 30rem;">
+                    <div style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 5px">
+{{--                        //condition for user profile--}}
+                        @if($postData->user->profile)
+                            <img class="profile_post_image" src="{{ asset('storage/' . $postData->user->profile->picture) }}" alt="jjj" style="width: 50px; height: 50px; border-radius: 50%;">
+                        @else
+                            <img class="profile_post_image" src="{{ asset("storage/uploads/empt.jpg") }}" alt="jjj" style="width: 50px; height: 50px; border-radius: 50%;">
+                        @endif
+                        <strong style=" margin-left:10px;">{{$postData->user->username}}</strong>
+                    </div>
+{{--                    //card image--}}
+                    <img src="{{asset("storage/$postData->post_image")}}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <div class="div_for_edit_or_del">
                             <div class="dropdown-center" style="display: flex; justify-content: end; ">
@@ -39,7 +47,15 @@
                                 </ul>
                             </div>
                             <div class="div_for_data">
-                                <p class="card-text">{{ $postData->caption }}</p>
+                                <p> <strong style="margin-top: 20px; margin-bottom: 10px">{{$postData->user->username}}</strong>
+                                    {{ $postData->caption }}
+                                    {{-- list out all the tags--}}
+                                    <span style="color: blue;">
+                                        @foreach($postData->tags as $tag)
+                                            #{{ $tag->tag_name }}
+                                         @endforeach
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>

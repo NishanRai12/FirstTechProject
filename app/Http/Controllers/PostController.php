@@ -21,7 +21,7 @@ class PostController extends Controller
 //index for authenticated user
     public function index()
     {
-        $posts = Post::with('user')->latest()->paginate(10);
+        $posts = Post::with(['user','tags'])->latest()->paginate(10);
         return view('post.index', ['posts' => $posts]);
     }
 
@@ -90,16 +90,20 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         $findPost = Post::where('id', $id)->first();
-        if($findPost){
-            $updatedPost=$findPost->update([
-                'caption' => $request['caption'],
-            ]);
-//            dd($updatedPost);
-            $updatedPost->tags()->sync($request->input('tags'));
+        $path = $findPost->post_image;
+        if($request->hasFile('post_image')){
+            $path = $request->file('post_image')->store('uploads', 'public');
         }
+        if($findPost){
+            $findPost->update([
+                'caption' => $request['caption'],
+                'post_image' => $path,
+            ]);
+        }
+            $findPost->tags()->sync($request->input('tags'));
         return back()->with(['success' => 'Post updated successfully']);
     }
 //    public function update(Request $request, string $id)

@@ -29,13 +29,21 @@ class ProfileController extends Controller
      */
     public function store(ProfileRequest $request)
     {
+        $path= null;
+//        check if the input has file or not
+
+        if($request->hasfile('profile_picture')){
+            $path = $request->file('profile_picture')->store('uploads','public');
+        }
+//        dd($path);
         $valaidatedBio=$request->validated();
         $bio=$valaidatedBio['bio'];
         $gender = $valaidatedBio['gender'];
         Profile::create([
             'user_id'=>$request['user_id'],
             'bio'=>$bio,
-            'gender'=>$gender
+            'gender'=>$gender,
+            'picture'=>$path
         ]);
         return redirect()->back();
     }
@@ -66,11 +74,17 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request, string $id)
     {
-        $validatedData = $request->validated();
         $profile = Profile::where('user_id', $id)->first();
+        $path= $profile->picture;
+        if($request->hasfile('profile_picture')){
+            $path = $request->file('profile_picture')->store('uploads','public');
+        }
+        $validatedData = $request->validated();
+//        dd($path);
         $profile->update([
             'bio' => $validatedData['bio'],
-            'gender' => $validatedData['gender']
+            'gender' => $validatedData['gender'],
+            'picture' => $path
         ]);
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
