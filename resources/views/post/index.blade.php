@@ -9,6 +9,9 @@
 @include('navigation')
 <div class="main_div">
     <div class=" child_div_1" id="pills-login" role="tabpanel" aria-labelledby="tab-login" style="margin-left: 200px">
+        @if($tag_name)
+            <h2>Posts related to tag: {{ $tag_name }}</h2>
+        @endif
         @foreach($posts as $postData)
             <div class="card" style=" margin-left: 150px; margin-bottom:20px;width: 30rem;">
                 <div style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 5px">
@@ -25,14 +28,15 @@
                 <div class="card-body">
                    <p> <strong style="margin-top: 20px; margin-bottom: 10px">{{$postData->user->username}}</strong> {{ $postData->caption }}
 {{--                      list out all the tags--}}
+{{--                       <button style="background-color: darkred" name=" {{$postData->tags_count}}">--}}
                        <span style="color: blue;">
                            @foreach($postData->tags as $tag)
-                            #{{ $tag->tag_name }}
+                               <a style="text-decoration:none;" href="{{ route('post.showTagRelatedPost', $tag->id) }}">#{{ $tag->tag_name }}</a>
                            @endforeach
                        </span>
                    </p>
+                   {{$postData->tags_count}}
 
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
         @endforeach

@@ -15,7 +15,10 @@ class TagController extends Controller
      */
     public function index()
     {
+        $tagData = Tag::withCount('posts')->simplePaginate(10);
 
+        $searched = -1;
+        return view('tag.index', compact('tagData', 'searched'));
     }
 
     /**
@@ -38,13 +41,13 @@ class TagController extends Controller
      */
     public function store(TagRequest $request)
     {
-//        dd($request);
         $validateTag = $request->validated();
+
         Tag::create([
             'user_id'=> $request->input('user_logged'),
             'tag_name' => $validateTag ['tag_name'],
         ]);
-        return redirect()->route('tag.create') ->with('success', 'Tag created successfully');
+        return back()->with('success', 'Tag created successfully');
     }
 
     /**
@@ -79,7 +82,7 @@ class TagController extends Controller
                 'tag_name' => $tagName
             ]);
         }
-            return redirect()->route('tag.create') ;
+            return redirect()->back() ;
     }
 
     /**
@@ -91,7 +94,7 @@ class TagController extends Controller
             $fetchTag = Tag::where('id', $id)->first();
             $fetchTag->delete();
         }
-        return redirect()->route('tag.create') ;
+        return redirect()->back() ;
     }
     public function search(Request $request){
         if(Tag::where('tag_name',$request->input('search_tag'))->exists()){

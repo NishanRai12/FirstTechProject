@@ -23,6 +23,7 @@ class TagRequest extends FormRequest
     {
         return [
             'tag_name'=>['required','string','min:3','max:255','unique:tags,tag_name'],
+            'tags.*' => 'distinct|min:3'
         ];
     }
 }

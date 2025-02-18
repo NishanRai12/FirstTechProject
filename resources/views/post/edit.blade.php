@@ -54,24 +54,17 @@
             {{$message}}
             @enderror
             <br>
-            <div class="tag-box">
-                <a style="margin-bottom: 20px; text-decoration: none" href="{{ route('tag.create') }}">
-                    <strong>Add more tags</strong>
-                </a>
-{{--                //dispaly all the current Tags of the post--}}
-                <span style="color: blue;">
-                    @foreach($post->tags as $tag)
-                        #{{ $tag->tag_name }}
-                    @endforeach
-                                    </span>
-                @foreach ($tags as $tag)
-                    <label style="display: block; margin-bottom: 10px;">
-                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
-                            {{ $post->tags->contains($tag->id) ? 'checked' : '' }}>
-                        {{ $tag->tag_name }}
-                    </label>
-                @endforeach
-
+            @php
+                //putting the fetched data in an array
+                $tagNames=[];
+               foreach($post->tags as $tag){
+                       $tagNames[] = $tag->tag_name;
+               }
+            @endphp
+            <div class="mb-3">
+                <label for="post_tag" class="form-label"><strong>Tag</strong></label>
+                {{--                image file input--}}
+                <input  style="color: darkblue" class="form-control" name="tags" value="#{{implode('# ', $tagNames)}}">
             </div>
             {{--            first div for caption --}}
             <button style="width: 100px;" class="btn btn-primary" type="submit">Update</button>

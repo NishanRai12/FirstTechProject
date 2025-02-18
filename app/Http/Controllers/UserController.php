@@ -37,6 +37,7 @@ class UserController extends Controller
         $username = $validateRegisterData['username'];
         $name = $validateRegisterData['name'];
         $password = $validateRegisterData['password'];
+        $role = "user";
         //fetch the data from the database
         $findUsername = User::where('username', $username)->first();
         while ($findUsername){
@@ -49,7 +50,8 @@ class UserController extends Controller
             'email' => $user_email,
             'username' => $username,
             'name' => $name,
-            'password' => $hashed_password
+            'password' => $hashed_password,
+            'role'=>$role
         ]);
         return redirect()->route('login');
 

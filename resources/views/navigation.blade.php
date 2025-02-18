@@ -80,6 +80,9 @@
             <li class="w3-bar-item w3-button d-flex align-items-center ms-4">
                 <i class="fa-regular fa-square-plus me-4"></i>
                 <a class="nav-link active" aria-current="page" href="{{route('post.create')}}">Create</a>
+            </li> <li class="w3-bar-item w3-button d-flex align-items-center ms-4">
+                <i class="fa-solid fa-tag me-4"></i>
+                <a class="nav-link active" aria-current="page" href="{{route('tag.index')}}">Tags</a>
             </li>
             <li style="margin-bottom: 10px" class="w3-bar-item w3-button d-flex align-items-center ms-4" data-bs-toggle="offcanvas" href="#offcanvasEExample" role="button" aria-controls="offcanvasExample">
                 <i class="fa-solid fa-magnifying-glass me-4"></i>
@@ -117,12 +120,13 @@
                                 <i class="fa-solid fa-user m-1" ></i>
                                 <a  style="margin-left:12px " class="dropdown-item hover-bg-grey" href="{{route('profile.show', Auth::user()->id)}}">Profile</a>
                             </button>
+
                             <button class ="d-flex" style=" margin-bottom: 15px; margin-top:20px;background-color: white ; color:black;border:none;">
                                 <i class="fa-solid fa-image-portrait m-1" ></i>
                                 <a style="margin-left:12px "class="dropdown-item hover-bg-grey" href="{{route('post.show', Auth::user()->id)}}">Post</a>
                             </button>
                             <button class ="d-flex" style="margin-bottom: 15px; margin-top:20px; background-color: white ; color:black;border:none;">
-                                <i class="fa-solid fa-user m-1" ></i>
+                                <i class="fa-solid fa-tag m-1"></i>
                                 <a style="margin-left:12px " class="dropdown-item hover-bg-grey" href="{{route('tag.create')}}">Tag</a>
                             </button>
                             <button class ="d-flex" style=" margin-bottom: 15px; margin-top:20px; background-color: white ; color:black;border:none;">

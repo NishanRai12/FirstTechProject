@@ -33,14 +33,20 @@ Route::middleware('auth')->group(function(){
     Route::post('/tag/search', [TagController::class, 'search'])->name('tag.search');
     Route::post('/post/search', [PostController::class, 'search'])->name('post.search');
 });
+
+Route::get('/related-post/{id}', [PostController::class, 'showTagRelatedPost'])->name('post.showTagRelatedPost');
 //middleware  passing home if logged in
 Route::middleware('nonauthCheck')->group(function(){
     //display the register page
     Route::get('/register',[UserController::class,'showRegistration'])->name('register');
 //display the login page
-    Route::get('/login',[UserController::class,'showLogin'])->name('login');
     //register the new user
     Route::post('/register',[UserController::class,'registerUser'])->name('setUser');
+    Route::get('/login',[UserController::class,'showLogin'])->name('login');
+});
+
+Route::middleware('adminCheck')->group(function(){
+
 });
 
 

@@ -51,6 +51,7 @@
                                     {{ $postData->caption }}
                                     {{-- list out all the tags--}}
                                     <span style="color: blue;">
+                                        {{$postData->tags_count}}
                                         @foreach($postData->tags as $tag)
                                             #{{ $tag->tag_name }}
                                          @endforeach
