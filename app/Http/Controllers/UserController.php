@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
-
+//.......
 class UserController extends Controller
 {
     public function showRegistration():View
@@ -35,7 +35,8 @@ class UserController extends Controller
         //validating the value
         $user_email = $validateRegisterData['email'];
         $username = $validateRegisterData['username'];
-        $name = $validateRegisterData['name'];
+        $firstname = $validateRegisterData['firstname'];
+        $lastname = $validateRegisterData['lastname'];
         $password = $validateRegisterData['password'];
         //fetch the data from the database
         $findUsername = User::where('username', $username)->first();
@@ -48,7 +49,8 @@ class UserController extends Controller
         User::create([
             'email' => $user_email,
             'username' => $username,
-            'name' => $name,
+            'first_name' => $firstname,
+            'last_name' => $lastname,
             'password' => $hashed_password
         ]);
         return redirect()->route('login');

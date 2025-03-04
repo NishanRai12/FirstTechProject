@@ -9,7 +9,8 @@ class Post extends Model
     protected $fillable = [
         'user_id',
         'caption',
-        'post_image'
+        'post_image',
+        'category_id'
     ];
     protected $table ="posts";
     public function user(){
@@ -17,6 +18,10 @@ class Post extends Model
     }
     public function tags(){
         return $this->belongsToMany(Tag::class);  // Many-to-many relationship
+    }
+    public function categories(){
+        return $this->belongsTo(Category::class);
+
     }
 
 }

@@ -16,15 +16,20 @@
         @error('email')
             <div style="color: red;">{{ $message }}</div>
         @enderror
-        <label for="name">Name</label>
-        <input type="text" name="name"><br>
-        @error('name')
+        <label for="firstname">First name</label>
+        <input type="text" name="firstname"><br>
+        @error('firstname')
             <div style="color: red;">{{ $message }}</div>
+        @enderror
+        <label for="lastname">Last name</label>
+        <input type="text" name="lastname"><br>
+        @error('lastname')
+        <div style="color: red;">{{ $message }}</div>
         @enderror
         <label for="username">Username</label>
         <input type="text" name="username"><br>
         @error('username')
-            <div style="color: red;">{{ $message }}</div>
+        <div style="color: red;">{{ $message }}</div>
         @enderror
         <label for="password">Password</label>
         <input type="text" name="password"><br>

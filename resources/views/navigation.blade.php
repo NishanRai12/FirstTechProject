@@ -53,7 +53,7 @@
     {{--    user profile header--}}
         <div style="margin-top: 30px; margin-left:40px;display: flex; align-items: center;">
             <div style="margin-right: 10px;">
-                @if(Auth::check() && Auth::user()->name)
+                @if(Auth::check() && Auth::user()->first_name)
                     @if(Auth::user()->profile && Auth::user()->profile->picture)
                         <img class="profile_post_image" src="{{ asset('storage/' . Auth::user()->profile->picture) }}" alt="jjj" style="width: 50px; height: 50px; border-radius: 50%;">
                     @else
@@ -62,7 +62,7 @@
             </div>
             <div>
                 <span style="color: black;"><strong>{{Auth::user()->username}}</strong></span> <br>
-                <span style=" color: rgba(69,67,67,0.84)">{{Auth::user()->name}}</span>
+                <span style=" color: rgba(69,67,67,0.84)">{{Auth::user()->fullName()}}</span>
             </div>
             @endif
         </div>
@@ -80,6 +80,13 @@
             <li class="w3-bar-item w3-button d-flex align-items-center ms-4">
                 <i class="fa-regular fa-square-plus me-4"></i>
                 <a class="nav-link active" aria-current="page" href="{{route('post.create')}}">Create</a>
+            </li> <li class="w3-bar-item w3-button d-flex align-items-center ms-4">
+                <i class="fa-solid fa-tag me-4"></i>
+                <a class="nav-link active" aria-current="page" href="{{route('tag.index')}}">Tags</a>
+            </li>
+             <li class="w3-bar-item w3-button d-flex align-items-center ms-4">
+                <i class="fa-solid fa-tag me-4"></i>
+                <a class="nav-link active" aria-current="page" href="{{route('category.index')}}">Category</a>
             </li>
             <li style="margin-bottom: 10px" class="w3-bar-item w3-button d-flex align-items-center ms-4" data-bs-toggle="offcanvas" href="#offcanvasEExample" role="button" aria-controls="offcanvasExample">
                 <i class="fa-solid fa-magnifying-glass me-4"></i>
@@ -117,12 +124,13 @@
                                 <i class="fa-solid fa-user m-1" ></i>
                                 <a  style="margin-left:12px " class="dropdown-item hover-bg-grey" href="{{route('profile.show', Auth::user()->id)}}">Profile</a>
                             </button>
+
                             <button class ="d-flex" style=" margin-bottom: 15px; margin-top:20px;background-color: white ; color:black;border:none;">
                                 <i class="fa-solid fa-image-portrait m-1" ></i>
                                 <a style="margin-left:12px "class="dropdown-item hover-bg-grey" href="{{route('post.show', Auth::user()->id)}}">Post</a>
                             </button>
                             <button class ="d-flex" style="margin-bottom: 15px; margin-top:20px; background-color: white ; color:black;border:none;">
-                                <i class="fa-solid fa-user m-1" ></i>
+                                <i class="fa-solid fa-tag m-1"></i>
                                 <a style="margin-left:12px " class="dropdown-item hover-bg-grey" href="{{route('tag.create')}}">Tag</a>
                             </button>
                             <button class ="d-flex" style=" margin-bottom: 15px; margin-top:20px; background-color: white ; color:black;border:none;">

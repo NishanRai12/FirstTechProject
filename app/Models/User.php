@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Http\Requests\Post;
+//use App\Http\Requests\Post;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+///This is user
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -19,7 +20,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'username',
         'password',
@@ -56,4 +58,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
    }
 
+   public function fullName(){
+        return $this->first_name .' '. $this->last_name;
+   }
 }

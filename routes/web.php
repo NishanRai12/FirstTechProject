@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 //use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TagController;
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function(){
 //logout
     Route::get('/logout',[UserController::class,'logout'])->name('logout');
     Route::resource('tag',TagController::class);
+    Route::resource('category',CategoryController::class);
     Route::post('/tag/search', [TagController::class, 'search'])->name('tag.search');
     Route::post('/post/search', [PostController::class, 'search'])->name('post.search');
 });
